@@ -5,7 +5,6 @@ export default class Solc {
 
     static compile(source:string, contractName:string){
         try {
-            // Konfigurasi input untuk solc
             const input = {
                 language: 'Solidity',
                 sources: {
@@ -22,12 +21,8 @@ export default class Solc {
                 },
             };
         
-            // Kompilasi contract
             const output = JSON.parse(solc.compile(JSON.stringify(input)));
         
-            console.log(output);
-            
-            // Cek jika ada error
             if (output.errors) {
                 output.errors.forEach((err: any) => {
                     console.error(err.formattedMessage);
