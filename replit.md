@@ -32,6 +32,26 @@ Preferred communication style: Simple, everyday language.
 - `shared/` - Shared TypeScript types and database schema
 - Root level configuration files for build tools and development
 
+## Advanced Features
+
+### Security & Testing
+- **Automated Security Scanning**: Real-time vulnerability detection for common smart contract issues
+- **Multi-Network Testing**: Support for testing across different blockchain networks
+- **Gas Optimization**: Analysis and suggestions for reducing gas consumption
+- **Code Quality Checks**: Linting and best practice enforcement
+
+### Development Tools
+- **Syntax Highlighting**: Full Solidity language support with error detection
+- **Auto-completion**: Smart code completion with OpenZeppelin library integration
+- **Real-time Compilation**: Instant feedback on code changes with error highlighting
+- **Template System**: Pre-built contract templates for common use cases
+
+### Analytics & Monitoring
+- **Deployment Analytics**: Track success rates, gas usage, and network distribution
+- **Performance Metrics**: Monitor contract interaction patterns and optimization opportunities
+- **Cost Analysis**: Detailed breakdown of deployment and interaction costs across networks
+- **Activity Tracking**: Real-time monitoring of user actions and system performance
+
 ## Key Components
 
 ### Database Schema (shared/schema.ts)
@@ -45,6 +65,11 @@ Preferred communication style: Simple, everyday language.
 - **TransactionHistory**: Display of user's transaction history with filtering
 - **ContractTemplates**: Gallery of pre-built contract templates
 - **WalletConnection**: Web3 wallet integration with network switching
+- **ContractSecurityScanner**: Automated security vulnerability analysis with recommendations
+- **MultiChainDeployer**: Deploy contracts across multiple blockchain networks simultaneously
+- **ContractTestingSuite**: Comprehensive testing framework with auto-generated test cases
+- **AdvancedCodeEditor**: Full-featured Solidity editor with syntax highlighting and real-time analysis
+- **AnalyticsDashboard**: Contract deployment and interaction analytics with visualizations
 
 ### Backend Services
 - **Storage Layer**: Abstracted storage interface with in-memory implementation for development

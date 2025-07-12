@@ -1,19 +1,26 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Code, Rocket, History, FileCode, Wallet } from "lucide-react";
+import { Code, Rocket, History, FileCode, Wallet, Shield, Globe, TestTube, BarChart3 } from "lucide-react";
 import WalletConnection from "@/components/wallet-connection";
 import ContractDeploy from "@/components/contract-deploy";
 import ContractInteract from "@/components/contract-interact";
 import TransactionHistory from "@/components/transaction-history";
 import ContractTemplates from "@/components/contract-templates";
+import ContractSecurityScanner from "@/components/contract-security-scanner";
+import MultiChainDeployer from "@/components/multi-chain-deployer";
+import ContractTestingSuite from "@/components/contract-testing-suite";
+import AdvancedCodeEditor from "@/components/advanced-code-editor";
+import AnalyticsDashboard from "@/components/analytics-dashboard";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useWeb3 } from "@/hooks/use-web3";
 
-type TabType = "deploy" | "interact" | "history" | "templates";
+type TabType = "deploy" | "interact" | "history" | "templates" | "security" | "multichain" | "testing" | "editor" | "analytics";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>("deploy");
+  const [sourceCode, setSourceCode] = useState("");
+  const [contractData, setContractData] = useState({ name: "", bytecode: "", abi: [] });
   const { account, network, balance, isConnected } = useWeb3();
 
   const tabs = [
@@ -21,6 +28,11 @@ export default function Home() {
     { id: "interact", label: "Interact with Contract", icon: Code },
     { id: "history", label: "Transaction History", icon: History },
     { id: "templates", label: "Contract Templates", icon: FileCode },
+    { id: "security", label: "Security Scanner", icon: Shield },
+    { id: "multichain", label: "Multi-Chain Deploy", icon: Globe },
+    { id: "testing", label: "Testing Suite", icon: TestTube },
+    { id: "editor", label: "Code Editor", icon: Code },
+    { id: "analytics", label: "Analytics", icon: BarChart3 },
   ] as const;
 
   const renderTabContent = () => {
@@ -33,6 +45,26 @@ export default function Home() {
         return <TransactionHistory />;
       case "templates":
         return <ContractTemplates onSelectTemplate={() => setActiveTab("deploy")} />;
+      case "security":
+        return <ContractSecurityScanner sourceCode={sourceCode} onScanComplete={(issues) => console.log('Security scan complete:', issues)} />;
+      case "multichain":
+        return <MultiChainDeployer contractData={contractData} onDeploymentComplete={(deployments) => console.log('Multi-chain deployment complete:', deployments)} />;
+      case "testing":
+        return <ContractTestingSuite contractCode={sourceCode} contractAbi={contractData.abi} onTestComplete={(results) => console.log('Testing complete:', results)} />;
+      case "editor":
+        return <AdvancedCodeEditor 
+          value={sourceCode} 
+          onChange={setSourceCode} 
+          onCompile={(result) => {
+            setContractData({
+              name: "CompiledContract",
+              bytecode: result.bytecode || "",
+              abi: result.abi || []
+            });
+          }} 
+        />;
+      case "analytics":
+        return <AnalyticsDashboard />;
       default:
         return <ContractDeploy />;
     }
