@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +37,20 @@ export default function ContractInteract() {
     queryKey: ["/api/contracts/address", contractAddress],
     enabled: !!contractAddress && contractAddress.length === 42,
   });
+
+  // Auto-fill ABI if contract is found in database
+  useEffect(() => {
+    if (contractData && contractData.abi) {
+      setAbiInput(JSON.stringify(contractData.abi, null, 2));
+      const functions = contractData.abi.filter((item: any) => item.type === "function");
+      setParsedAbi(functions);
+      
+      toast({
+        title: "Contract Found",
+        description: "Contract ABI loaded from database",
+      });
+    }
+  }, [contractData, toast]);
 
   const loadContract = () => {
     if (!contractAddress) {

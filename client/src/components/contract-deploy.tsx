@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +30,33 @@ export default function ContractDeploy() {
   const { toast } = useToast();
   const { account, web3, isConnected } = useWeb3();
   const queryClient = useQueryClient();
+
+  // Load template data if available
+  useEffect(() => {
+    const selectedTemplate = localStorage.getItem('selectedTemplate');
+    if (selectedTemplate) {
+      const template = JSON.parse(selectedTemplate);
+      setSourceCode(template.sourceCode || "");
+      setContractName(template.name || "");
+      
+      // Parse constructor parameters if available
+      if (template.constructorParams) {
+        setConstructorParams(template.constructorParams.map((param: any) => ({
+          name: param.name,
+          type: param.type,
+          value: ""
+        })));
+      }
+      
+      // Clear the stored template
+      localStorage.removeItem('selectedTemplate');
+      
+      toast({
+        title: "Template Loaded",
+        description: `${template.name} template has been loaded`,
+      });
+    }
+  }, [toast]);
 
   const compileMutation = useMutation({
     mutationFn: async (data: { sourceCode: string; version: string }) => {

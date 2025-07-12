@@ -10,14 +10,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { network, deployer } = req.query;
       
-      let contracts;
+      let contracts: any[] = [];
       if (network) {
         contracts = await storage.getContractsByNetwork(network as string);
       } else if (deployer) {
         contracts = await storage.getContractsByDeployer(deployer as string);
-      } else {
-        // Return empty array if no filters provided
-        contracts = [];
       }
       
       res.json(contracts);
@@ -90,14 +87,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { address, contract } = req.query;
       
-      let transactions;
+      let transactions: any[] = [];
       if (address) {
         transactions = await storage.getTransactionsByAddress(address as string);
       } else if (contract) {
         transactions = await storage.getTransactionsByContract(contract as string);
-      } else {
-        // Return empty array if no filters provided
-        transactions = [];
       }
       
       res.json(transactions);

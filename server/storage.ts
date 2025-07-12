@@ -41,6 +41,9 @@ export class MemStorage implements IStorage {
 
     // Initialize with some contract templates
     this.initializeTemplates();
+    
+    // Initialize with sample data for demonstration
+    this.initializeSampleData();
   }
 
   private initializeTemplates() {
@@ -125,12 +128,149 @@ contract MyNFT is ERC721, Ownable {
     });
   }
 
+  private initializeSampleData() {
+    // Add sample deployed contracts
+    const sampleContracts = [
+      {
+        name: "MyToken",
+        address: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        abi: [
+          {
+            "inputs": [
+              {"name": "name", "type": "string"},
+              {"name": "symbol", "type": "string"},
+              {"name": "initialSupply", "type": "uint256"}
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+          },
+          {
+            "inputs": [],
+            "name": "name",
+            "outputs": [{"internalType": "string", "name": "", "type": "string"}],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "symbol",
+            "outputs": [{"internalType": "string", "name": "", "type": "string"}],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [{"name": "to", "type": "address"}, {"name": "amount", "type": "uint256"}],
+            "name": "transfer",
+            "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          }
+        ],
+        bytecode: "0x608060405234801561001057600080fd5b50...",
+        sourceCode: `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    constructor(string memory name, string memory symbol, uint256 initialSupply) ERC20(name, symbol) {
+        _mint(msg.sender, initialSupply * 10**decimals());
+    }
+}`,
+        compilationVersion: "0.8.19",
+        network: "1",
+        deployerAddress: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        deploymentTxHash: "0xa1b2c3d4e5f6789012345678901234567890123456789012345678901234567890",
+        isVerified: true
+      }
+    ];
+
+    // Add sample transactions
+    const sampleTransactions = [
+      {
+        hash: "0xa1b2c3d4e5f6789012345678901234567890123456789012345678901234567890",
+        type: "deploy",
+        contractAddress: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        functionName: null,
+        parameters: null,
+        gasUsed: 1250000,
+        gasPrice: "20000000000",
+        value: "0",
+        status: "success",
+        network: "1",
+        fromAddress: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        toAddress: null,
+        blockNumber: 18500000
+      },
+      {
+        hash: "0xb2c3d4e5f6789012345678901234567890123456789012345678901234567890a1",
+        type: "call",
+        contractAddress: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        functionName: "transfer",
+        parameters: ["0x123...456", "1000000000000000000"],
+        gasUsed: 51000,
+        gasPrice: "18000000000",
+        value: "0",
+        status: "success",
+        network: "1",
+        fromAddress: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        toAddress: "0x742d35C6C72c4f0e8a5e7a2EC7c8e9e8E2b8e8e8",
+        blockNumber: 18500010
+      }
+    ];
+
+    // Initialize sample contracts
+    sampleContracts.forEach(contract => {
+      const id = this.contractIdCounter++;
+      this.contracts.set(id, {
+        ...contract,
+        id,
+        createdAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000), // Random time within last week
+        bytecode: contract.bytecode || null,
+        sourceCode: contract.sourceCode || null,
+        compilationVersion: contract.compilationVersion || null,
+        deploymentTxHash: contract.deploymentTxHash || null,
+        isVerified: contract.isVerified || false,
+      });
+    });
+
+    // Initialize sample transactions
+    sampleTransactions.forEach(transaction => {
+      const id = this.transactionIdCounter++;
+      this.transactions.set(id, {
+        ...transaction,
+        id,
+        createdAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000), // Random time within last week
+        contractAddress: transaction.contractAddress || null,
+        functionName: transaction.functionName || null,
+        parameters: transaction.parameters || null,
+        gasUsed: transaction.gasUsed || null,
+        gasPrice: transaction.gasPrice || null,
+        value: transaction.value || null,
+        toAddress: transaction.toAddress || null,
+        blockNumber: transaction.blockNumber || null,
+      });
+    });
+  }
+
   async createContract(insertContract: InsertContract): Promise<Contract> {
     const id = this.contractIdCounter++;
     const contract: Contract = {
       ...insertContract,
       id,
       createdAt: new Date(),
+      bytecode: insertContract.bytecode || null,
+      sourceCode: insertContract.sourceCode || null,
+      compilationVersion: insertContract.compilationVersion || null,
+      deploymentTxHash: insertContract.deploymentTxHash || null,
+      isVerified: insertContract.isVerified || false,
     };
     this.contracts.set(id, contract);
     return contract;
@@ -167,6 +307,14 @@ contract MyNFT is ERC721, Ownable {
       ...insertTransaction,
       id,
       createdAt: new Date(),
+      contractAddress: insertTransaction.contractAddress || null,
+      functionName: insertTransaction.functionName || null,
+      parameters: insertTransaction.parameters || null,
+      gasUsed: insertTransaction.gasUsed || null,
+      gasPrice: insertTransaction.gasPrice || null,
+      value: insertTransaction.value || null,
+      toAddress: insertTransaction.toAddress || null,
+      blockNumber: insertTransaction.blockNumber || null,
     };
     this.transactions.set(id, transaction);
     return transaction;

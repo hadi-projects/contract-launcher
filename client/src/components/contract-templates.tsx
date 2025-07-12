@@ -43,7 +43,9 @@ export default function ContractTemplates({ onSelectTemplate }: ContractTemplate
   };
 
   const handleSelectTemplate = (template: any) => {
-    // In a real app, this would populate the deploy form with template data
+    // Store the selected template data in localStorage for the deploy component
+    localStorage.setItem('selectedTemplate', JSON.stringify(template));
+    
     toast({
       title: "Template Selected",
       description: `${template.name} template loaded for deployment`,
