@@ -1,0 +1,2 @@
+// var solc = require('solc');
+
