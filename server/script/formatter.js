@@ -7,37 +7,34 @@ function encodeToBase64(sourceCode) {
 function prepareSolidityPayload(contractName, solidityVersion) {
     try {
         // Baca file Solidity
-        const sourceCode = `// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+        const sourceCode = `
+        // SPDX-License-Identifier: GPL-3.0
 
-contract SimpleWallet {
-    // Mapping untuk menyimpan saldo setiap alamat
-    mapping(address => uint256) private balances;
+pragma solidity >=0.8.2 <0.9.0;
 
-    // Event untuk mencatat transaksi deposit dan withdraw
-    event Deposit(address indexed user, uint256 amount);
-    event Withdraw(address indexed user, uint256 amount);
+/**
+ * @title Storage
+ * @dev Store & retrieve value in a variable
+ * @custom:dev-run-script ./scripts/deploy_with_ethers.ts
+ */
+contract Storage {
 
-    // Fungsi untuk deposit ether ke wallet
-    function deposit() public payable {
-        require(msg.value > 0, "Deposit amount must be greater than 0");
-        balances[msg.sender] += msg.value;
-        emit Deposit(msg.sender, msg.value);
+    uint256 number;
+
+    /**
+     * @dev Store value in variable
+     * @param num value to store
+     */
+    function store(uint256 num) public {
+        number = num;
     }
 
-    // Fungsi untuk withdraw ether dari wallet
-    function withdraw(uint256 amount) public {
-        require(amount > 0, "Withdraw amount must be greater than 0");
-        require(balances[msg.sender] >= amount, "Insufficient balance");
-        
-        balances[msg.sender] -= amount;
-        payable(msg.sender).transfer(amount);
-        emit Withdraw(msg.sender, amount);
-    }
-
-    // Fungsi untuk memeriksa saldo
-    function getBalance() public view returns (uint256) {
-        return balances[msg.sender];
+    /**
+     * @dev Return value 
+     * @return value of 'number'
+     */
+    function retrieve() public view returns (uint256){
+        return number;
     }
 }`
         

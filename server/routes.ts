@@ -3,11 +3,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContractSchema, insertTransactionSchema } from "@shared/schema";
 import { z } from "zod";
-import validateSolidityCode from "./validation/contract";
-// import Solc from "./service/solc";
-import solc from 'solc'
-import Solc from "./service/solc";
 import CompileController from "./controller/compile";
+import ContractController from "./controller/contract";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contract routes
@@ -86,6 +83,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to update contract" });
     }
   });
+
+  app.post("/api/contracts/deploy", new ContractController().deploy);
 
   // Transaction routes
   app.get("/api/transactions", async (req, res) => {
