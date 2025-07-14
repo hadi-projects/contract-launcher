@@ -84,7 +84,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/contracts/deploy", new ContractController().deploy);
+  app.post("/api/contract/deploy", new ContractController().deploy);
+  app.post("/api/contract/interact", new ContractController().interact);
 
   // Transaction routes
   app.get("/api/transactions", async (req, res) => {

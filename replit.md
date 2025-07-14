@@ -162,3 +162,5 @@ Preferred communication style: Simple, everyday language.
 **State Management**: React Query handles server state caching and synchronization, reducing complexity compared to Redux-style solutions.
 
 **Monorepo Structure**: Shared types between client and server ensure type safety across the full stack while maintaining clear separation of concerns.
+
+
